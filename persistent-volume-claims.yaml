@@ -1,0 +1,13 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: cattr-app-pvc
+spec:
+  accessModes:
+    - ReadWriteMany
+  storageClassName: manual  # Use the appropriate StorageClass
+  resources:
+    requests:
+      storage: 1Gi
+  volumeName: cattr-app-pv
+

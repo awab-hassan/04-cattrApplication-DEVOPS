@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cattr-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cattr-app
+  template:
+    metadata:
+      labels:
+        app: cattr-app
+    spec:
+      containers:
+      - name: cattr-app
+        image: amazingcat/cattr:latest  # Replace with the actual Cattr image
+        ports:
+        - containerPort: 80
+        env:
+        - name: POSTGRES_HOST
+          value: cattr-postgres-deployment  # Use the hostname of the PostgreSQL deployment
+        - name: POSTGRES_PORT
+          value: "5432"
+        - name: POSTGRES_USER
+          value: cattr_user  # Hardcoded PostgreSQL username
+        - name: POSTGRES_PASSWORD
+          value: cattr_password  # Hardcoded PostgreSQL password
+        - name: POSTGRES_DB
+          value: cattr_db  # Hardcoded PostgreSQL database name
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cattr-app-service
+spec:
+  selector:
+    app: cattr-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+  type: NodePort

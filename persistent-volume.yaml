@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  name: cattr-app-pv
+spec:
+  capacity:
+    storage: 1Gi
+  volumeMode: Filesystem
+  accessModes:
+    - ReadWriteMany  # Use appropriate access mode (ReadWriteOnce, ReadOnlyMany, ReadWriteMany)
+  persistentVolumeReclaimPolicy: Retain  # Use Retain, Recycle, or Delete as needed
+  storageClassName: manual  # Use the appropriate StorageClass
+  nfs:
+    path: /mnt/nfs_mount
+    server: #SERVER_IP
+    readOnly: false

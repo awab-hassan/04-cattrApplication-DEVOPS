@@ -1,0 +1,46 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cattr-postgres-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: cattr-postgres
+  template:
+    metadata:
+      labels:
+        app: cattr-postgres
+    spec:
+      containers:
+      - name: postgres
+        image: percona:latest  # Replace with the Percona image version you need
+        ports:
+        - containerPort: 5432
+        env:
+        - name: POSTGRES_USER
+          value: cattr_user  # Hardcoded PostgreSQL username
+        - name: POSTGRES_PASSWORD
+          value: cattr_password  # Hardcoded PostgreSQL password
+        - name: POSTGRES_DB
+          value: cattr_db  # Hardcoded PostgreSQL database name
+        volumeMounts:
+        - name: postgres-storage
+          mountPath: /var/lib/postgresql/data
+      volumes:
+      - name: postgres-storage
+        persistentVolumeClaim:
+          claimName: cattr-app-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: cattr-postgres-service
+spec:
+  selector:
+    app: cattr-postgres
+  ports:
+  - protocol: TCP
+    port: 5432
+    targetPort: 5432
+  type: NodePort
