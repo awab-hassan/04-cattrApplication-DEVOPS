@@ -1,13 +1,65 @@
-# Project #4 - Cattr deployment.
+# Cattr Application Deployment on Kubernetes
 
-Project Type: Application Dockerization and Deployment on Kubernetes cluster.
+![Kubernetes](https://img.shields.io/badge/Kubernetes-326CE5?style=flat-square&logo=kubernetes&logoColor=white)
+![Docker](https://img.shields.io/badge/Docker-2496ED?style=flat-square&logo=docker&logoColor=white)
+![PostgreSQL](https://img.shields.io/badge/PostgreSQL-4169E1?style=flat-square&logo=postgresql&logoColor=white)
+![NFS](https://img.shields.io/badge/NFS-Storage-orange?style=flat-square)
 
-Project Description: The client asked me to deploy Cattr application on kubernetes cluster, MYSQL database should be connected to application. Configuration of Persistent volumes and persistent volume claims to store data, allocate 5gb memory to each volume.
+## Overview
 
-Solution:
-- I deployed PersistentVolume using NFS for Postgress Database.
-- I deployed PersistentVolumeClaims for Postgress Database.
-- I deployed Postgress Database Deployment and Service.
-- I deployed Cattr Application's Deployment and Service.
+Deployed the Cattr time-tracking application on a Kubernetes cluster with a PostgreSQL database backend. The setup includes an NFS-backed PersistentVolume for the database with 5GB allocated, PersistentVolumeClaims for storage binding, and full Deployment + Service configuration for both Cattr and PostgreSQL.
 
-![1dc19a7475d247cebca3350d1834b201](https://github.com/awab-hassan/04-cattrApplication-DEVOPS/assets/90965012/1c5b306a-cb1a-496e-aebd-87d3161f8ac9)
+## Architecture
+
+![Architecture Diagram](./architecture.png)
+
+The deployment consists of:
+- **NFS PersistentVolume** for PostgreSQL data storage (5GB)
+- **PersistentVolumeClaim** bound to the PV
+- **PostgreSQL** Deployment + ClusterIP Service
+- **Cattr** Deployment + Service connected to PostgreSQL
+
+## Tech Stack
+
+| Layer | Technology |
+|-------|-----------|
+| Container orchestration | Kubernetes |
+| Application | Cattr (time tracking) |
+| Database | PostgreSQL |
+| Storage | NFS PersistentVolume (5GB) |
+| Networking | Kubernetes Services |
+
+## What Was Built
+
+**1. NFS PersistentVolume**
+- Created a PV using NFS as the storage backend for PostgreSQL data
+- 5GB storage capacity allocated
+
+**2. PersistentVolumeClaim**
+- PVC bound to the NFS PV
+- Mounted into the PostgreSQL Deployment for data persistence
+
+**3. PostgreSQL Deployment + Service**
+- PostgreSQL deployed with the PVC mounted at the data directory
+- Exposed internally via ClusterIP Service for Cattr to connect
+
+**4. Cattr Deployment + Service**
+- Cattr application deployed and connected to PostgreSQL via environment variables
+- Exposed via Kubernetes Service
+
+## Project Structure
+
+```
+04-cattrApplication-DEVOPS/
+├── pv-postgres.yaml          (NFS PersistentVolume)
+├── pvc-postgres.yaml         (PersistentVolumeClaim)
+├── postgres-deployment.yaml  (PostgreSQL Deployment + Service)
+├── cattr-deployment.yaml     (Cattr Deployment + Service)
+└── README.md
+```
+
+## Key Learnings
+
+- Deploying PostgreSQL on Kubernetes with NFS-backed persistent storage
+- Connecting a modern time-tracking application to a Kubernetes-native database service
+- Managing stateful workloads with PersistentVolumes in a production cluster
