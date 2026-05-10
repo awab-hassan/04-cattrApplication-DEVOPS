@@ -47,17 +47,6 @@ The deployment consists of:
 - Cattr application deployed and connected to PostgreSQL via environment variables
 - Exposed via Kubernetes Service
 
-## Project Structure
-
-```
-04-cattrApplication-DEVOPS/
-├── pv-postgres.yaml          (NFS PersistentVolume)
-├── pvc-postgres.yaml         (PersistentVolumeClaim)
-├── postgres-deployment.yaml  (PostgreSQL Deployment + Service)
-├── cattr-deployment.yaml     (Cattr Deployment + Service)
-└── README.md
-```
-
 ## Key Learnings
 
 - Deploying PostgreSQL on Kubernetes with NFS-backed persistent storage
